@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres_hilwa
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: db_uts_hilwa
+      TZ: Asia/Jakarta
+    ports:
+      - "22030:5432"
+    volumes:
+      - pgdata_hilwa:/var/lib/postgresql/data
+    networks:
+      - uts_net_hilwa
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_hilwa
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "44030:80"
+    depends_on:
+      - postgres
+    networks:
+      - uts_net_hilwa
+
+volumes:
+  pgdata_hilwa:
+
+networks:
+  uts_net_hilwa:
